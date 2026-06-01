@@ -6,113 +6,148 @@
   "pctC3": 19.6,
   "pctC2": 5.74,
   "pctC1": 74.65,
+  "population": {
+    "total": 59661000,
+    "inCat3": 11923243,
+    "pctInCat3": 20
+  },
   "topDept": [
     {
       "code": "2A",
       "nom": "CORSE-DU-SUD",
       "pctC3": 1,
       "c3": 124,
-      "total": 124
+      "total": 124,
+      "pop": 167000,
+      "popC3": 167000
     },
     {
       "code": "23",
       "nom": "CREUSE",
       "pctC3": 0.946,
       "c3": 244,
-      "total": 258
+      "total": 258,
+      "pop": 113000,
+      "popC3": 106868
     },
     {
       "code": "87",
       "nom": "HAUTE-VIENNE",
       "pctC3": 0.9,
       "c3": 180,
-      "total": 200
+      "total": 200,
+      "pop": 365000,
+      "popC3": 328500
     },
     {
       "code": "29",
       "nom": "FINISTERE",
       "pctC3": 0.876,
       "c3": 241,
-      "total": 275
+      "total": 275,
+      "pop": 925000,
+      "popC3": 810636
     },
     {
       "code": "56",
       "nom": "MORBIHAN",
       "pctC3": 0.81,
       "c3": 200,
-      "total": 247
+      "total": 247,
+      "pop": 772000,
+      "popC3": 625101
     },
     {
       "code": "19",
       "nom": "CORREZE",
       "pctC3": 0.809,
       "c3": 229,
-      "total": 283
+      "total": 283,
+      "pop": 240000,
+      "popC3": 194205
     },
     {
       "code": "42",
       "nom": "LOIRE",
       "pctC3": 0.794,
       "c3": 258,
-      "total": 325
+      "total": 325,
+      "pop": 763000,
+      "popC3": 605705
     },
     {
       "code": "44",
       "nom": "LOIRE-ATLANTIQUE",
       "pctC3": 0.784,
       "c3": 163,
-      "total": 208
+      "total": 208,
+      "pop": 1452000,
+      "popC3": 1137865
     },
     {
       "code": "12",
       "nom": "AVEYRON",
       "pctC3": 0.768,
       "c3": 219,
-      "total": 285
+      "total": 285,
+      "pop": 280000,
+      "popC3": 215158
     },
     {
       "code": "43",
       "nom": "HAUTE-LOIRE",
       "pctC3": 0.766,
       "c3": 196,
-      "total": 256
+      "total": 256,
+      "pop": 227000,
+      "popC3": 173797
     },
     {
       "code": "15",
       "nom": "CANTAL",
       "pctC3": 0.765,
       "c3": 189,
-      "total": 247
+      "total": 247,
+      "pop": 144000,
+      "popC3": 110186
     },
     {
       "code": "22",
       "nom": "COTES-D'ARMOR",
       "pctC3": 0.76,
       "c3": 269,
-      "total": 354
+      "total": 354,
+      "pop": 605000,
+      "popC3": 459732
     },
     {
       "code": "48",
       "nom": "LOZERE",
       "pctC3": 0.759,
       "c3": 120,
-      "total": 158
+      "total": 158,
+      "pop": 76000,
+      "popC3": 57722
     },
     {
       "code": "63",
       "nom": "PUY-DE-DOME",
       "pctC3": 0.692,
       "c3": 323,
-      "total": 467
+      "total": 467,
+      "pop": 666000,
+      "popC3": 460638
     },
     {
       "code": "53",
       "nom": "MAYENNE",
       "pctC3": 0.685,
       "c3": 174,
-      "total": 254
+      "total": 254,
+      "pop": 308000,
+      "popC3": 210992
     }
   ],
-  "source": "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr)",
-  "generatedAt": "2026-06-01T15:25:41.509Z"
+  "source": "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr) · Pop INSEE 2024",
+  "generatedAt": "2026-06-01T15:59:21.878Z"
 }

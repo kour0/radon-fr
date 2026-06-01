@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "./logo";
 import type { Selected } from "./radon-map";
-import type { GlobalStats } from "@/lib/stats";
+import { type GlobalStats, formatHabitants } from "@/lib/stats";
 
 const CAT_BADGES = {
   1: { label: "Cat. 1 — faible", color: "bg-[#1e6091]/20 text-[#5fa8d3] ring-[#1e6091]/40" },
@@ -116,7 +116,101 @@ export function InfoPanel({
               />
               <div className="text-muted-foreground border-border/40 border-t pt-3 text-xs">
                 ≈ <strong className="text-foreground">1 commune sur 5</strong> est classée à
-                potentiel <em>élevé</em>. Près de 10 millions d&apos;habitants y vivent.
+                potentiel <em>élevé</em>.
+              </div>
+              <div className="text-foreground text-xs leading-relaxed">
+                Ramené à la <strong>population</strong> :{" "}
+                <strong className="text-[#ff6b6b] font-mono">
+                  ≈ {formatHabitants(stats.population.inCat3)}
+                </strong>{" "}
+                d&apos;habitants vivent dans une commune classée à potentiel élevé —{" "}
+                <strong>{stats.population.pctInCat3.toFixed(0)} %</strong> de la
+                population française*.
+              </div>
+              <div className="text-muted-foreground/70 text-[10px] leading-snug">
+                * Estimation : population du département × part des communes en
+                cat. 3. Suppose une densité homogène entre communes du même dept.
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Separator />
+
+        {/* Sous quelles conditions on est exposé */}
+        <section>
+          <h2 className="text-muted-foreground mb-3 text-[11px] font-semibold tracking-widest uppercase">
+            Sous quelles conditions on est exposé
+          </h2>
+          <Card className="border-border/60 bg-card/60">
+            <CardContent className="space-y-3 text-xs">
+              <ExposureRow
+                icon="🏠"
+                label="Lieu"
+                detail="À l'intérieur des bâtiments — surtout sous-sol, rez-de-chaussée et habitats anciens. Le radon s'accumule dans les espaces fermés et mal ventilés."
+              />
+              <ExposureRow
+                icon="⏱"
+                label="Durée"
+                detail="≈ 16 h / jour passées chez soi en moyenne. L'exposition est cumulative sur la vie entière."
+              />
+              <ExposureRow
+                icon="🪨"
+                label="Aggravants"
+                detail="Fissures dans les fondations, vides sanitaires, anciennes mines, failles géologiques, captages d'eau souterraine."
+              />
+              <ExposureRow
+                icon="❄️"
+                label="Saison"
+                detail="L'hiver concentre le radon (fenêtres fermées, chauffage qui aspire l'air du sol). Les pics sont nocturnes."
+              />
+              <ExposureRow
+                icon="🚬"
+                label="Tabac"
+                detail="Effet multiplicatif : radon + tabac fait pire que les deux additionnés. ≈ 90 % des décès radon sont chez les fumeurs."
+              />
+            </CardContent>
+          </Card>
+        </section>
+
+        <Separator />
+
+        {/* Échelle de risque concrète (Bq/m³) */}
+        <section>
+          <h2 className="text-muted-foreground mb-3 text-[11px] font-semibold tracking-widest uppercase">
+            Si je mesure chez moi, à partir de quel chiffre c&apos;est grave ?
+          </h2>
+          <Card className="border-border/60 bg-card/60">
+            <CardContent className="space-y-2.5">
+              <RiskLevel
+                color="#1e6091"
+                range="< 100 Bq/m³"
+                level="Faible"
+                action="Recommandation OMS atteinte. Maintenir une ventilation régulière."
+              />
+              <RiskLevel
+                color="#3a7ca5"
+                range="100 – 300 Bq/m³"
+                level="Mesurable"
+                action="Risque non négligeable sur la vie entière. Améliorer la ventilation, étancher la dalle."
+              />
+              <RiskLevel
+                color="#f6b21b"
+                range="300 – 1 000 Bq/m³"
+                level="Significatif"
+                action="Niveau de référence ASN dépassé. Travaux recommandés sous 1 an (ventilation mécanique, étanchéité)."
+              />
+              <RiskLevel
+                color="#d63333"
+                range="≥ 1 000 Bq/m³"
+                level="Élevé"
+                action="Action prioritaire. Dans une commune cat. 3, ~6 % des bâtiments dépassent ce seuil."
+              />
+              <div className="text-muted-foreground/80 border-border/40 border-t pt-2 text-[10px] leading-snug">
+                Source : seuils ASN (décret 2018) et OMS. Sur formations
+                uranifères, ≈ <strong className="text-foreground">40 %</strong> des
+                bâtiments dépassent 100 Bq/m³, ≈{" "}
+                <strong className="text-foreground">6 %</strong> dépassent 400.
               </div>
             </CardContent>
           </Card>
@@ -138,19 +232,30 @@ export function InfoPanel({
             {stats.topDept.slice(0, 10).map((d) => (
               <div
                 key={d.code}
-                className="bg-card/40 hover:bg-card/70 ring-border/40 flex items-center justify-between rounded-lg px-3 py-2 ring-1 transition"
+                className="bg-card/40 hover:bg-card/70 ring-border/40 rounded-lg px-3 py-2 ring-1 transition"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground font-mono text-[10px]">{d.code}</span>
-                  <span className="text-foreground text-xs capitalize">
-                    {d.nom.toLowerCase()}
-                  </span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground font-mono text-[10px]">{d.code}</span>
+                    <span className="text-foreground text-xs capitalize">
+                      {d.nom.toLowerCase()}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#ff6b6b] font-mono text-xs tabular-nums">
+                      {(d.pctC3 * 100).toFixed(0)}%
+                    </span>
+                    <Bar pct={d.pctC3} />
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[#ff6b6b] font-mono text-xs tabular-nums">
-                    {(d.pctC3 * 100).toFixed(0)}%
+                <div className="text-muted-foreground mt-1 flex items-center gap-2 text-[10px]">
+                  <span>
+                    {formatHabitants(d.pop)} hab. dont{" "}
+                    <span className="text-foreground/90 font-mono tabular-nums">
+                      ≈ {formatHabitants(d.popC3)}
+                    </span>{" "}
+                    en zone cat. 3
                   </span>
-                  <Bar pct={d.pctC3} />
                 </div>
               </div>
             ))}
@@ -281,6 +386,61 @@ function Bar({ pct }: { pct: number }) {
         className="h-full rounded-full bg-[#d63333]"
         style={{ width: `${pct * 100}%` }}
       />
+    </div>
+  );
+}
+
+function ExposureRow({
+  icon,
+  label,
+  detail,
+}: {
+  icon: string;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="text-base leading-tight" aria-hidden="true">
+        {icon}
+      </span>
+      <div className="flex-1 leading-snug">
+        <div className="text-foreground text-[11px] font-semibold tracking-wide uppercase">
+          {label}
+        </div>
+        <div className="text-muted-foreground mt-0.5">{detail}</div>
+      </div>
+    </div>
+  );
+}
+
+function RiskLevel({
+  color,
+  range,
+  level,
+  action,
+}: {
+  color: string;
+  range: string;
+  level: string;
+  action: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <span
+        className="ring-foreground/10 mt-0.5 inline-block h-3 w-3 shrink-0 rounded-sm ring-1"
+        style={{ background: color }}
+        aria-hidden="true"
+      />
+      <div className="flex-1 leading-snug">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-foreground font-mono text-xs tabular-nums">{range}</span>
+          <span className="text-foreground/70 text-[10px] tracking-wider uppercase">
+            {level}
+          </span>
+        </div>
+        <div className="text-muted-foreground mt-0.5 text-[11px]">{action}</div>
+      </div>
     </div>
   );
 }

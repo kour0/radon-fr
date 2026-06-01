@@ -13,6 +13,33 @@ const ROOT = path.resolve(__dirname, "..");
 const OUT = path.resolve(ROOT, "public/data");
 fs.mkdirSync(OUT, { recursive: true });
 
+// Populations 2024 par code INSEE de département (estimations INSEE).
+// Embarquées ici pour rendre les chiffres "X habitants en zone cat. 3"
+// reproductibles sans dépendance externe supplémentaire.
+const POP_BY_DEPT = {
+  "01": 658000, "02": 524000, "03": 333000, "04": 165000, "05": 142000,
+  "06": 1083000, "07": 327000, "08": 263000, "09": 153000, "10": 312000,
+  "11": 376000, "12": 280000, "13": 2061000, "14": 696000, "15": 144000,
+  "16": 350000, "17": 654000, "18": 297000, "19": 240000, "21": 535000,
+  "22": 605000, "23": 113000, "24": 410000, "25": 542000, "26": 519000,
+  "27": 600000, "28": 432000, "29": 925000, "2A": 167000, "2B": 191000,
+  "30": 754000, "31": 1471000, "32": 192000, "33": 1659000, "34": 1212000,
+  "35": 1098000, "36": 220000, "37": 615000, "38": 1281000, "39": 257000,
+  "40": 422000, "41": 331000, "42": 763000, "43": 227000, "44": 1452000,
+  "45": 690000, "46": 174000, "47": 332000, "48": 76000, "49": 822000,
+  "50": 491000, "51": 564000, "52": 168000, "53": 308000, "54": 729000,
+  "55": 184000, "56": 772000, "57": 1042000, "58": 200000, "59": 2611000,
+  "60": 832000, "61": 277000, "62": 1463000, "63": 666000, "64": 689000,
+  "65": 226000, "66": 488000, "67": 1158000, "68": 769000, "69": 1888000,
+  "70": 233000, "71": 549000, "72": 568000, "73": 437000, "74": 845000,
+  "75": 2102000, "76": 1242000, "77": 1450000, "78": 1442000, "79": 372000,
+  "80": 569000, "81": 386000, "82": 263000, "83": 1083000, "84": 561000,
+  "85": 700000, "86": 437000, "87": 365000, "88": 360000, "89": 333000,
+  "90": 141000, "91": 1326000, "92": 1639000, "93": 1668000, "94": 1411000,
+  "95": 1259000, "971": 384000, "972": 367000, "973": 286000, "974": 873000,
+  "976": 320000,
+};
+
 // --- 1. Charger le CSV IRSN ---
 const csv = fs.readFileSync(path.join(ROOT, "data/radon-irsn.csv"), "utf8");
 const lines = csv.split(/\r?\n/).filter(Boolean);
@@ -208,18 +235,37 @@ for (const s of deptStats.values()) {
 }
 const total = totalC1 + totalC2 + totalC3;
 
+// Pop estimée en zone cat. 3 par dept = pop_dept × (c3 / total_communes_dept).
+// C'est une approximation (suppose une densité de pop uniforme par commune
+// dans le département) ; suffisante pour donner un ordre de grandeur.
 const topDept = [...statsByDeptCode.entries()]
   .filter(([, s]) => s.total >= 50)
-  .map(([code, s]) => ({
-    code,
-    nom: s.name,
-    pctC3: s.c3 / s.total,
-    c3: s.c3,
-    total: s.total,
-  }))
+  .map(([code, s]) => {
+    const pop = POP_BY_DEPT[code] ?? 0;
+    const ratioC3 = s.c3 / s.total;
+    return {
+      code,
+      nom: s.name,
+      pctC3: ratioC3,
+      c3: s.c3,
+      total: s.total,
+      pop,
+      popC3: Math.round(pop * ratioC3),
+    };
+  })
   .sort((a, b) => b.pctC3 - a.pctC3)
   .slice(0, 15)
   .map((d) => ({ ...d, pctC3: Math.round(d.pctC3 * 1000) / 1000 }));
+
+// Total national : population estimée en zone cat. 3 sur tous les dept.
+let totalPop = 0;
+let totalPopC3 = 0;
+for (const [code, s] of statsByDeptCode.entries()) {
+  const pop = POP_BY_DEPT[code];
+  if (!pop || s.total === 0) continue;
+  totalPop += pop;
+  totalPopC3 += Math.round(pop * (s.c3 / s.total));
+}
 
 const stats = {
   total,
@@ -229,8 +275,13 @@ const stats = {
   pctC3: Math.round((totalC3 / total) * 10000) / 100,
   pctC2: Math.round((totalC2 / total) * 10000) / 100,
   pctC1: Math.round((totalC1 / total) * 10000) / 100,
+  population: {
+    total: totalPop,
+    inCat3: totalPopC3,
+    pctInCat3: Math.round((totalPopC3 / totalPop) * 1000) / 10,
+  },
   topDept,
-  source: "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr)",
+  source: "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr) · Pop INSEE 2024",
   generatedAt: new Date().toISOString(),
 };
 

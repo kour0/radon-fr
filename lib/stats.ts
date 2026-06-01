@@ -7,12 +7,19 @@ export type GlobalStats = {
   pctC1: number;
   pctC2: number;
   pctC3: number;
+  population: {
+    total: number;
+    inCat3: number;
+    pctInCat3: number;
+  };
   topDept: {
     code: string;
     nom: string;
     pctC3: number;
     c3: number;
     total: number;
+    pop: number;
+    popC3: number;
   }[];
   source: string;
   generatedAt: string;
@@ -20,4 +27,14 @@ export type GlobalStats = {
 
 export function formatPct(n: number, digits = 1): string {
   return `${(n * 100).toFixed(digits)} %`;
+}
+
+/** Formate une population : 1_650_000 → "1,65 M", 245_000 → "245 k" */
+export function formatHabitants(n: number): string {
+  if (n >= 1_000_000) {
+    const v = (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2);
+    return `${v.replace(".", ",")} M`;
+  }
+  if (n >= 1_000) return `${Math.round(n / 1_000)} k`;
+  return `${n}`;
 }
