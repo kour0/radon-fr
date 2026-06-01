@@ -129,6 +129,39 @@
   }
 }
 
+/* --- MapLibre controls — décalés pour ne pas passer sous le header flottant ---
+   Sélecteur double-classe pour battre la spécificité de la règle MapLibre
+   bundlée (qui sinon gagne par ordre de source). */
+.maplibregl-map .maplibregl-ctrl-top-right {
+  top: 4rem; /* desktop : sous le bandeau search + toggle */
+}
+@media (max-width: 640px) {
+  .maplibregl-map .maplibregl-ctrl-top-right {
+    top: 7.5rem; /* mobile : sous le wrap header */
+  }
+}
+
+/* Styling discret aligné au thème dark */
+.maplibregl-ctrl-group {
+  background: oklch(0.205 0 0 / 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid oklch(1 0 0 / 0.08) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+.maplibregl-ctrl-group button {
+  background-color: transparent !important;
+  color: oklch(0.92 0 0) !important;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid oklch(1 0 0 / 0.08) !important;
+}
+.maplibregl-ctrl-group button:hover {
+  background-color: oklch(1 0 0 / 0.06) !important;
+}
+.maplibregl-ctrl-group button span.maplibregl-ctrl-icon {
+  filter: invert(1) brightness(0.92);
+}
+
 /* --- MapLibre popup theming (aligné au design system dark / glass) --- */
 .radon-popup-wrap .maplibregl-popup-content {
   background: oklch(0.205 0 0 / 0.92);
