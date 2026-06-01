@@ -10,7 +10,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
 [![Données IRSN](https://img.shields.io/badge/Donn%C3%A9es-IRSN%20%2F%20ASNR-d63333?style=for-the-badge)](https://www.data.gouv.fr/datasets/connaitre-le-potentiel-radon-de-ma-commune/)
 
-![Carte du radon en France — vue principale](./docs/hero.png)
+![Carte du radon en France — vue principale](./docs/hero.jpg)
 
 ---
 
@@ -29,7 +29,7 @@ L'app **s'appuie uniquement sur les données officielles publiées par l'IRSN / 
 
 | Recherche communes & départements | Mobile |
 | :--- | :--- |
-| ![Recherche par nom](./docs/search.png) | ![Vue mobile](./docs/mobile.png) |
+| ![Recherche par nom](./docs/search.jpg) | ![Vue mobile](./docs/mobile.jpg) |
 
 ## Stack
 

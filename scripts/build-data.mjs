@@ -7,15 +7,32 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse } from "csv-parse/sync";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.resolve(ROOT, "public/data");
 fs.mkdirSync(OUT, { recursive: true });
 
-// Populations 2024 par code INSEE de département (estimations INSEE).
-// Embarquées ici pour rendre les chiffres "X habitants en zone cat. 3"
-// reproductibles sans dépendance externe supplémentaire.
+// --- Populations communales (INSEE, derniers recensements diffusés) ---
+// Source : data.gouv.fr "Communes et villes de France" (CSV téléchargé par
+// `pnpm data:fetch`). Cette table par-commune permet un calcul exact :
+// pop_exposée = somme des pop des communes en cat. 3, sans approximation.
+const POP_BY_INSEE = new Map();
+{
+  const csvBuf = fs.readFileSync(path.join(ROOT, "data/communes-pop.csv"));
+  const rows = parse(csvBuf, { columns: true, skip_empty_lines: true, bom: true });
+  for (const r of rows) {
+    const code = r.code_insee;
+    const pop = Number(r.population);
+    if (code && Number.isFinite(pop) && pop > 0) POP_BY_INSEE.set(code, pop);
+  }
+}
+console.log(`Pop communale : ${POP_BY_INSEE.size} communes indexées`);
+
+// Fallback département (estimations 2024) — utilisé uniquement si on n'a pas
+// de pop communale pour la commune (rare ; cas des fusions ou des codes obsolètes)
+// et pour afficher la pop totale d'un département dans le panneau latéral.
 const POP_BY_DEPT = {
   "01": 658000, "02": 524000, "03": 333000, "04": 165000, "05": 142000,
   "06": 1083000, "07": 327000, "08": 263000, "09": 153000, "10": 312000,
@@ -101,6 +118,7 @@ let unmatched = 0;
 const enrichedFeatures = [];
 const deptStats = new Map();
 const searchEntries = []; // [{ k, c, n, d, lng, lat, q }]
+let communesSansPop = 0; // diagnostic : communes IRSN sans pop INSEE
 
 for (const f of communesRaw.features) {
   if (!f.geometry) continue;
@@ -134,11 +152,21 @@ for (const f of communesRaw.features) {
     });
   }
 
-  const s = deptStats.get(radon.dept) ?? { total: 0, c1: 0, c2: 0, c3: 0, code: deptCode };
+  const pop = POP_BY_INSEE.get(insee) ?? 0;
+  if (pop === 0) communesSansPop++;
+
+  const s = deptStats.get(radon.dept) ?? {
+    total: 0, c1: 0, c2: 0, c3: 0,
+    pop: 0, popC1: 0, popC2: 0, popC3: 0,
+    code: deptCode,
+  };
   s.total++;
   s[`c${radon.cat}`]++;
+  s.pop += pop;
+  s[`popC${radon.cat}`] += pop;
   deptStats.set(radon.dept, s);
 }
+console.log(`Pop : ${communesSansPop} communes IRSN sans appariement pop INSEE`);
 console.log(`Joined ${matched} communes, ${unmatched} without geometry match`);
 
 const communesOut = {
@@ -168,6 +196,10 @@ for (const [name, s] of deptStats.entries()) {
     existing.c1 += s.c1;
     existing.c2 += s.c2;
     existing.c3 += s.c3;
+    existing.pop += s.pop;
+    existing.popC1 += s.popC1;
+    existing.popC2 += s.popC2;
+    existing.popC3 += s.popC3;
   } else {
     statsByDeptCode.set(s.code, { ...s, name });
   }
@@ -235,36 +267,31 @@ for (const s of deptStats.values()) {
 }
 const total = totalC1 + totalC2 + totalC3;
 
-// Pop estimée en zone cat. 3 par dept = pop_dept × (c3 / total_communes_dept).
-// C'est une approximation (suppose une densité de pop uniforme par commune
-// dans le département) ; suffisante pour donner un ordre de grandeur.
+// Pop en zone cat. 3 par dept = somme exacte des populations communales
+// de chaque commune classée cat. 3 dans le dept (calcul exact, plus
+// d'approximation par densité homogène).
 const topDept = [...statsByDeptCode.entries()]
   .filter(([, s]) => s.total >= 50)
-  .map(([code, s]) => {
-    const pop = POP_BY_DEPT[code] ?? 0;
-    const ratioC3 = s.c3 / s.total;
-    return {
-      code,
-      nom: s.name,
-      pctC3: ratioC3,
-      c3: s.c3,
-      total: s.total,
-      pop,
-      popC3: Math.round(pop * ratioC3),
-    };
-  })
+  .map(([code, s]) => ({
+    code,
+    nom: s.name,
+    pctC3: s.c3 / s.total,
+    c3: s.c3,
+    total: s.total,
+    pop: s.pop || POP_BY_DEPT[code] || 0,
+    popC3: s.popC3,
+  }))
   .sort((a, b) => b.pctC3 - a.pctC3)
   .slice(0, 15)
   .map((d) => ({ ...d, pctC3: Math.round(d.pctC3 * 1000) / 1000 }));
 
-// Total national : population estimée en zone cat. 3 sur tous les dept.
+// Total national : population exacte en zone cat. 3 (somme des pops
+// communales classées cat. 3, métropole + DOM couverts par l'IRSN).
 let totalPop = 0;
 let totalPopC3 = 0;
-for (const [code, s] of statsByDeptCode.entries()) {
-  const pop = POP_BY_DEPT[code];
-  if (!pop || s.total === 0) continue;
-  totalPop += pop;
-  totalPopC3 += Math.round(pop * (s.c3 / s.total));
+for (const s of statsByDeptCode.values()) {
+  totalPop += s.pop;
+  totalPopC3 += s.popC3;
 }
 
 const stats = {
@@ -281,7 +308,7 @@ const stats = {
     pctInCat3: Math.round((totalPopC3 / totalPop) * 1000) / 10,
   },
   topDept,
-  source: "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr) · Pop INSEE 2024",
+  source: "IRSN / ASNR — Potentiel radon par commune (data.gouv.fr) · Pop INSEE par commune (data.gouv.fr / villedereve)",
   generatedAt: new Date().toISOString(),
 };
 

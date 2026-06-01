@@ -121,15 +121,15 @@ export function InfoPanel({
               <div className="text-foreground text-xs leading-relaxed">
                 Ramené à la <strong>population</strong> :{" "}
                 <strong className="text-[#ff6b6b] font-mono">
-                  ≈ {formatHabitants(stats.population.inCat3)}
+                  {formatHabitants(stats.population.inCat3)}
                 </strong>{" "}
                 d&apos;habitants vivent dans une commune classée à potentiel élevé —{" "}
-                <strong>{stats.population.pctInCat3.toFixed(0)} %</strong> de la
-                population française*.
+                <strong>{stats.population.pctInCat3.toFixed(1)} %</strong> de la
+                population française.
               </div>
               <div className="text-muted-foreground/70 text-[10px] leading-snug">
-                * Estimation : population du département × part des communes en
-                cat. 3. Suppose une densité homogène entre communes du même dept.
+                Calcul exact : somme des populations INSEE de chaque commune
+                classée cat. 3 (pas une estimation par densité moyenne).
               </div>
             </CardContent>
           </Card>
@@ -252,7 +252,7 @@ export function InfoPanel({
                   <span>
                     {formatHabitants(d.pop)} hab. dont{" "}
                     <span className="text-foreground/90 font-mono tabular-nums">
-                      ≈ {formatHabitants(d.popC3)}
+                      {formatHabitants(d.popC3)}
                     </span>{" "}
                     en zone cat. 3
                   </span>
