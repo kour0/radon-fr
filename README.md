@@ -5,6 +5,7 @@
 > **À quel point c'est dangereux ? Quelles régions sont touchées ? Pourquoi la façade Bretagne → Pays Basque ?**
 
 [![Live demo](https://img.shields.io/badge/Live-app--six--pi--40.vercel.app-black?style=for-the-badge&logo=vercel)](https://app-six-pi-40.vercel.app)
+[![CI](https://img.shields.io/github/actions/workflow/status/kour0/radon-fr/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/kour0/radon-fr/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
 [![Données IRSN](https://img.shields.io/badge/Donn%C3%A9es-IRSN%20%2F%20ASNR-d63333?style=for-the-badge)](https://www.data.gouv.fr/datasets/connaitre-le-potentiel-radon-de-ma-commune/)
