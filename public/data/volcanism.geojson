@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.97,
+          45.78
+        ]
+      },
+      "properties": {
+        "nom": "Chaîne des Puys",
+        "region": "Auvergne",
+        "typeVolc": "Champ de volcans monogéniques",
+        "age": "Quaternaire (95k - 8k ans)",
+        "note": "80 volcans alignés N-S, basaltes & trachyandésites — UNESCO 2018"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.81,
+          45.55
+        ]
+      },
+      "properties": {
+        "nom": "Massif du Mont-Dore — Sancy",
+        "region": "Auvergne",
+        "typeVolc": "Stratovolcan érodé",
+        "age": "5,1 - 0,2 Ma",
+        "note": "Phonolites alcalines, roches U-Th — sommet Puy de Sancy (1 886 m)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.76,
+          45.05
+        ]
+      },
+      "properties": {
+        "nom": "Cantal",
+        "region": "Auvergne",
+        "typeVolc": "Plus grand stratovolcan d'Europe",
+        "age": "13 - 2,1 Ma",
+        "note": "70 km de diamètre, basaltes & trachytes"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.85,
+          45.4
+        ]
+      },
+      "properties": {
+        "nom": "Cézallier",
+        "region": "Auvergne",
+        "typeVolc": "Plateau basaltique",
+        "age": "7,5 - 3 Ma",
+        "note": "Vastes coulées de lave, eaux thermales associées"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3,
+          44.66
+        ]
+      },
+      "properties": {
+        "nom": "Aubrac",
+        "region": "Aveyron / Lozère",
+        "typeVolc": "Plateau basaltique",
+        "age": "9 - 6 Ma",
+        "note": "Coulées basaltiques étendues"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.1,
+          45.05
+        ]
+      },
+      "properties": {
+        "nom": "Velay",
+        "region": "Haute-Loire",
+        "typeVolc": "Province volcanique",
+        "age": "13 - 0,5 Ma",
+        "note": "Mont-Bar, dernier volcan en activité de France métropolitaine"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.75,
+          44.95
+        ]
+      },
+      "properties": {
+        "nom": "Devès",
+        "region": "Haute-Loire",
+        "typeVolc": "Plateau basaltique",
+        "age": "3,5 - 0,7 Ma",
+        "note": "Plus de 150 cônes stromboliens"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.55,
+          44.65
+        ]
+      },
+      "properties": {
+        "nom": "Coirons / Vivarais",
+        "region": "Ardèche",
+        "typeVolc": "Plateau et chaîne basaltique",
+        "age": "8 - 30k ans (Lac Pavin équivalent en Vivarais : ~30k ans)",
+        "note": "Volcanisme le plus récent de France"
+      }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "total": 32017,
+  "c1": 23902,
+  "c2": 1839,
+  "c3": 6276,
+  "pctC3": 19.6,
+  "pctC2": 5.74,
+  "pctC1": 74.65,
+  "topDept": [
+    {
+      "code": "2A",
+      "nom": "CORSE-DU-SUD",
+      "pctC3": 1,
+      "c3": 124,
+      "total": 124
+    },
+    {
+      "code": "23",
+      "nom": "CREUSE",
+      "pctC3": 0.946,
+      "c3": 244,
+      "total": 258
+    },
+    {
+      "code": "87",
+      "nom": "HAUTE-VIENNE",
+      "pctC3": 0.9,
+      "c3": 180,
+      "total": 200
+    },
+    {
+      "code": "29",
+      "nom": "FINISTERE",
+      "pctC3": 0.876,
+      "c3": 241,
+      "total": 275
+    },
+    {
+      "code": "56",
+      "nom": "MORBIHAN",
+      "pctC3": 0.81,
+      "c3": 200,
+      "total": 247
+    },
+    {
+      "code": "19",
+      "nom": "CORREZE",
+      "pctC3": 0.809,
+      "c3": 229,
+      "total": 283
+    },
+    {
+      "code": "42",
+      "nom": "LOIRE",
+      "pctC3": 0.794,
+      "c3": 258,
+      "total": 325
+    },
+    {
+      "code": "44",
+      "nom": "LOIRE-ATLANTIQUE",
+      "pctC3": 0.784,
+      "c3": 163,
+      "total": 208
+    },
+    {
+      "code": "12",
+      "nom": "AVEYRON",
+      "pctC3": 0.768,
+      "c3": 219,
+      "total": 285
+    },
+    {
+      "code": "43",
+      "nom": "HAUTE-LOIRE",
+      "pctC3": 0.766,
+      "c3": 196,
+      "total": 256
+    },
+    {
+      "code": "15",
+      "nom": "CANTAL",
+      "pctC3": 0.765,
+      "c3": 189,
+      "total": 247
+    },
+    {
+      "code": "22",
+      "nom": "COTES-D'ARMOR",
+      "pctC3": 0.76,
+      "c3": 269,
+      "total": 354
+    },
+    {
+      "code": "48",
+      "nom": "LOZERE",
+      "pctC3": 0.759,
+      "c3": 120,
+      "total": 158
+    },
+    {
+      "code": "63",
+      "nom": "PUY-DE-DOME",
+      "pctC3": 0.692,
+      "c3": 323,
+      "total": 467
+    },
+    {
+      "code": "53",
+      "nom": "MAYENNE",
+      "pctC3": 0.685,
+      "c3": 174,
+      "total": 254
+    }
+  ],
+  "source": "IRSN / ASNR — Connaître le potentiel radon de ma commune (data.gouv.fr)",
+  "generatedAt": "2026-06-01T15:25:41.509Z"
+}
